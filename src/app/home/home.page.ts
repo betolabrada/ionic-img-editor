@@ -53,7 +53,7 @@ export class HomePage {
     if (this.platform.is('android')) {
       downloadsLocation = 'file:///storage/emulated/0/';
     } else if (this.platform.is('ios')) {
-      downloadsLocation = this.file.documentsDirectory;
+      downloadsLocation = this.file.dataDirectory;
     }
     const folderpath = downloadsLocation + 'Download';
     const blob = base64ToFile(this.croppedImage);

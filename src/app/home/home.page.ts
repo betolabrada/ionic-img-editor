@@ -51,11 +51,11 @@ export class HomePage {
   async saveImage() {
     let downloadsLocation = '';
     if (this.platform.is('android')) {
-      downloadsLocation = 'file:///storage/emulated/0/';
+      downloadsLocation = 'file:///storage/emulated/0/Download';
     } else if (this.platform.is('ios')) {
       downloadsLocation = this.file.dataDirectory;
     }
-    const folderpath = downloadsLocation + 'Download';
+    const folderpath = downloadsLocation;
     const blob = base64ToFile(this.croppedImage);
     const filename = this.getFilename();
     try {

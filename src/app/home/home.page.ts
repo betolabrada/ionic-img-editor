@@ -70,8 +70,7 @@ export class HomePage {
     };
 
     const imageData = await this.camera.getPicture(options);
-    this.myImage = 'data:image/jpeg;base64,' + imageData;
-    
+    this.myImage = 'data:image/jpeg;base64,' + imageData;    
   }
 
   setEditing(editing) {
@@ -89,8 +88,8 @@ export class HomePage {
   }
 
   save() {
-    console.log('saving...')
-    this.angularCropper.crop()
+    console.log('saving...');
+    this.angularCropper.crop();
     this.myImage = this.croppedImage;
     this.setEditing(false);
     this.saveImage();

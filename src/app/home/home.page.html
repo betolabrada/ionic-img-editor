@@ -26,19 +26,20 @@
         </ion-text>
       </ion-col>
     </ion-row>
-    <image-cropper
-      *ngIf="editing"
-      [imageBase64]="myImage"
-      [maintainAspectRatio]="false"
-      [aspectRatio]="4/3"
-      format="jpeg"
-      (imageCropped)="imageCropped($event)"
-      outputType="base64"
-      autoCrop="false"
-      [canvasRotation]="canvasRotation"
-      [transform]="transform"
-    >
-    </image-cropper>
+    <div *ngIf="editing" class="image-wrapper">
+      <image-cropper
+        [imageBase64]="myImage"
+        [maintainAspectRatio]="false"
+        [aspectRatio]="4/3"
+        format="jpeg"
+        (imageCropped)="imageCropped($event)"
+        outputType="base64"
+        autoCrop="false"
+        [canvasRotation]="canvasRotation"
+        [transform]="transform"
+      >
+      </image-cropper>
+    </div>
     <ion-footer class="footer">
       <ion-row *ngIf="editing">
         <ion-col size="3">
@@ -63,7 +64,9 @@
         </ion-col>
       </ion-row>
     </ion-footer>
-    <img *ngIf="!editing" [src]="myImage">
+    <div *ngIf="!editing && myImage" class="image-wrapper">
+      <img [src]="myImage" class="img">
+    </div>
     <ion-button *ngIf="!editing" (click)="captureImage()" expand="block">
       {{ !myImage ? 'Escoger una imagen' : 'Escoger otra imagen'}} 
     </ion-button>

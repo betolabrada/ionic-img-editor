@@ -7,7 +7,7 @@ import {
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 import { File } from '@ionic-native/file/ngx';
-import { ToastController } from '@ionic/angular';
+import { ToastController, Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +29,8 @@ export class HomePage {
   constructor(
     private camera: Camera, 
     private file: File, 
-    public toastController: ToastController
+    public toastController: ToastController,
+    private platform: Platform
   ) {}
 
   // Presentar toast
@@ -49,7 +50,10 @@ export class HomePage {
   // Guardar la imagen cuando se presione aceptar
   async saveImage() {
     const blob = base64ToFile(this.croppedImage);
-    const folderpath = this.file.externalDataDirectory;
+    let folderpath = this.file.dataDirectory;
+    if(this.platform.is('android')) {
+      folderpath = this.file.externalDataDirectory;
+    }
     const filename = `img_${new Date().getTime()}.png`;
     try {
       await this.file.writeFile(folderpath, filename, blob);

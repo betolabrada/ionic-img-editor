@@ -49,15 +49,18 @@ export class HomePage {
 
   // Guardar la imagen cuando se presione aceptar
   async saveImage() {
-    const blob = base64ToFile(this.croppedImage);
-    let folderpath = this.file.dataDirectory;
-    if(this.platform.is('android')) {
-      folderpath = this.file.externalDataDirectory;
+    let downloadsLocation = '';
+    if (this.platform.is('android')) {
+      downloadsLocation = 'file:///storage/emulated/0/';
+    } else if (this.platform.is('ios')) {
+      downloadsLocation = this.file.documentsDirectory;
     }
-    const filename = `img_${new Date().getTime()}.png`;
+    const folderpath = downloadsLocation + 'Download';
+    const blob = base64ToFile(this.croppedImage);
+    const filename = this.getFilename();
     try {
-      await this.file.writeFile(folderpath, filename, blob);
-      this.presentToast(`Imagen guardada con exito en ${folderpath}`);
+      const path = await this.file.writeFile(folderpath, filename, blob);
+      this.presentToast(`Imagen guardada con éxito en: ${path.fullPath}`);
     } catch (err) {
       console.log(err);
     }
@@ -75,6 +78,10 @@ export class HomePage {
 
     const imageData = await this.camera.getPicture(options);
     this.myImage = 'data:image/jpeg;base64,' + imageData;    
+  }
+
+  getFilename() {
+    return `img_${new Date().getTime()}.png`;
   }
 
   setEditing(editing) {

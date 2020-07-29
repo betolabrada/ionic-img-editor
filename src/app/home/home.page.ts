@@ -2,8 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { 
   ImageCroppedEvent, 
   ImageCropperComponent, 
-  ImageTransform, 
-  base64ToFile } from 'ngx-image-cropper';
+  ImageTransform } from 'ngx-image-cropper';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 import { File } from '@ionic-native/file/ngx';
@@ -23,7 +22,7 @@ export class HomePage {
   @ViewChild(ImageCropperComponent, { static: false })
   angularCropper: ImageCropperComponent;
   editing = false;
-  filepath = '';
+  cropped = false;
 
   canvasRotation = 0;
   transform: ImageTransform = {};
@@ -52,15 +51,6 @@ export class HomePage {
 
   // Guardar la imagen cuando se presione aceptar
   async saveImage() {
-    // let downloadsLocation = '';
-    // if (this.platform.is('android')) {
-    //   downloadsLocation = 'file:///storage/emulated/0/Download';
-    // } else if (this.platform.is('ios')) {
-    //   downloadsLocation = this.file.dataDirectory;
-    // }
-    // const folderpath = downloadsLocation;
-    // const blob = base64ToFile(this.croppedImage);
-    // const filename = this.getFilename();
     try {
       await this.photoLibrary.requestAuthorization();
       const res = await this.photoLibrary.saveImage(this.croppedImage, 'PicEditor');
@@ -107,8 +97,13 @@ export class HomePage {
     console.log('saving...');
     this.angularCropper.crop();
     this.myImage = this.croppedImage;
-    this.saveImage();
+    this.cropped = true;
     this.setEditing(false);
+  }
+
+  saveToAlbum() {
+    this.saveImage();
+    this.cropped = false;
   }
 
   rotateLeft() {

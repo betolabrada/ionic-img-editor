@@ -9,6 +9,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { ToastController, Platform } from '@ionic/angular';
 
+import { PhotoLibrary } from '@ionic-native/photo-library/ngx';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -30,7 +32,8 @@ export class HomePage {
     private camera: Camera, 
     private file: File, 
     public toastController: ToastController,
-    private platform: Platform
+    private platform: Platform,
+    private photoLibrary: PhotoLibrary
   ) {}
 
   // Presentar toast
@@ -60,6 +63,8 @@ export class HomePage {
     const filename = this.getFilename();
     try {
       const path = await this.file.writeFile(folderpath, filename, blob);
+      const res = await this.photoLibrary.saveImage(path.nativeURL, 'PicEditor');
+      console.log('Saved to gallery PicEditor', res);
       this.presentToast(`Imagen guardada con éxito en: ${path.fullPath}`);
     } catch (err) {
       console.log(err);

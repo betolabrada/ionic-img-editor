@@ -9,6 +9,7 @@ import { File } from '@ionic-native/file/ngx';
 import { ToastController, Platform } from '@ionic/angular';
 
 import { PhotoLibrary } from '@ionic-native/photo-library/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,8 @@ export class HomePage {
     private file: File, 
     public toastController: ToastController,
     private platform: Platform,
-    private photoLibrary: PhotoLibrary
+    private photoLibrary: PhotoLibrary,
+    private androidPermissions: AndroidPermissions
   ) {}
 
   // Presentar toast
@@ -50,14 +52,40 @@ export class HomePage {
   }
 
   // Guardar la imagen cuando se presione aceptar
-  async saveImage() {
+  async saveImageAndroid() {
+    const read = this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE;
+    const write = this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE;
+    console.log(read);
     try {
-      await this.photoLibrary.requestAuthorization();
+      // await this.photoLibrary.requestAuthorization();
+      const permRead = await this.androidPermissions.checkPermission(read);
+      const permWrite = await this.androidPermissions.checkPermission(write);
+      console.log(permRead);
+      console.log(permWrite);
+      if (permRead.hasPermission && permWrite.hasPermission) {
+        const res = await this.photoLibrary.saveImage(this.croppedImage, 'PicEditor');
+        console.log(res);
+        this.presentToast('Imagen guardada con éxito');
+      } else {
+        await this.androidPermissions.requestPermissions([read, write]);
+        this.saveImageAndroid();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async saveImageIOS() {
+    try {
       const res = await this.photoLibrary.saveImage(this.croppedImage, 'PicEditor');
       console.log(res);
       this.presentToast('Imagen guardada con éxito');
     } catch (err) {
       console.log(err);
+      if (err.startsWith('Permission')) {
+        await this.photoLibrary.requestAuthorization();
+        this.saveImageIOS();
+      }
     }
   }
 
@@ -102,7 +130,11 @@ export class HomePage {
   }
 
   saveToAlbum() {
-    this.saveImage();
+    if (this.platform.is('android')) {
+      this.saveImageAndroid();
+    } else if (this.platform.is('ios')) {
+      this.saveImageIOS();
+    }
     this.cropped = false;
   }
 

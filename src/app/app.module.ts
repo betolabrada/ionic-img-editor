@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { Camera } from '@ionic-native/camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { PhotoLibrary } from '@ionic-native/photo-library/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { PhotoLibrary } from '@ionic-native/photo-library/ngx';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Camera,
     File,
-    PhotoLibrary
+    PhotoLibrary,
+    AndroidPermissions
   ],
   bootstrap: [AppComponent]
 })

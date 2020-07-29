@@ -13,7 +13,7 @@ import { Camera } from '@ionic-native/camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { PhotoLibrary } from '@ionic-native/photo-library/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-
+import { Instagram } from '@ionic-native/instagram/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,7 +26,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
     Camera,
     File,
     PhotoLibrary,
-    AndroidPermissions
+    AndroidPermissions,
+    Instagram
   ],
   bootstrap: [AppComponent]
 })

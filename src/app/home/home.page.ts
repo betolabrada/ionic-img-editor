@@ -11,6 +11,8 @@ import { ToastController, Platform } from '@ionic/angular';
 import { PhotoLibrary } from '@ionic-native/photo-library/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
+import { Instagram } from '@ionic-native/instagram/ngx';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -34,8 +36,18 @@ export class HomePage {
     public toastController: ToastController,
     private platform: Platform,
     private photoLibrary: PhotoLibrary,
-    private androidPermissions: AndroidPermissions
+    private androidPermissions: AndroidPermissions,
+    private instagram: Instagram
   ) {}
+
+  // Compartir imagen
+  async shareImage() {
+    try {
+      await this.instagram.share(this.myImage);
+    } catch (err) {
+      alert(err);
+    }
+  }
 
   // Presentar toast
   async presentToast(message: string) {

@@ -52,20 +52,20 @@ export class HomePage {
 
   // Guardar la imagen cuando se presione aceptar
   async saveImage() {
-    let downloadsLocation = '';
-    if (this.platform.is('android')) {
-      downloadsLocation = 'file:///storage/emulated/0/Download';
-    } else if (this.platform.is('ios')) {
-      downloadsLocation = this.file.dataDirectory;
-    }
-    const folderpath = downloadsLocation;
-    const blob = base64ToFile(this.croppedImage);
-    const filename = this.getFilename();
+    // let downloadsLocation = '';
+    // if (this.platform.is('android')) {
+    //   downloadsLocation = 'file:///storage/emulated/0/Download';
+    // } else if (this.platform.is('ios')) {
+    //   downloadsLocation = this.file.dataDirectory;
+    // }
+    // const folderpath = downloadsLocation;
+    // const blob = base64ToFile(this.croppedImage);
+    // const filename = this.getFilename();
     try {
-      const path = await this.file.writeFile(folderpath, filename, blob);
-      const res = await this.photoLibrary.saveImage(path.nativeURL, 'PicEditor');
-      console.log('Saved to gallery PicEditor', res);
-      this.presentToast(`Imagen guardada con éxito en: ${path.fullPath}`);
+      await this.photoLibrary.requestAuthorization();
+      const res = await this.photoLibrary.saveImage(this.croppedImage, 'PicEditor');
+      console.log(res);
+      this.presentToast('Imagen guardada con éxito');
     } catch (err) {
       console.log(err);
     }
@@ -107,8 +107,8 @@ export class HomePage {
     console.log('saving...');
     this.angularCropper.crop();
     this.myImage = this.croppedImage;
-    this.setEditing(false);
     this.saveImage();
+    this.setEditing(false);
   }
 
   rotateLeft() {

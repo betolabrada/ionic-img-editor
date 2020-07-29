@@ -31,23 +31,29 @@
         </ion-text>
       </ion-col>
     </ion-row>
-    <div *ngIf="editing" class="image-wrapper">
-      <image-cropper
-        [imageBase64]="myImage"
-        [maintainAspectRatio]="false"
-        [aspectRatio]="4/3"
-        format="jpeg"
-        (imageCropped)="imageCropped($event)"
-        outputType="base64"
-        autoCrop="false"
-        [canvasRotation]="canvasRotation"
-        [transform]="transform"
-        class="img fit-contain"
-      >
-      </image-cropper>
-    </div>
-    <ion-footer class="footer">
-      <ion-row *ngIf="editing">
+    <ion-row>
+      <ion-col class="col-wrapper">
+        <div *ngIf="editing" class="image-wrapper">
+          <image-cropper
+            [imageBase64]="myImage"
+            [maintainAspectRatio]="false"
+            [aspectRatio]="4/3"
+            format="jpeg"
+            (imageCropped)="imageCropped($event)"
+            outputType="base64"
+            autoCrop="false"
+            [canvasRotation]="canvasRotation"
+            [transform]="transform"
+          >
+          </image-cropper>
+        </div>
+        <div *ngIf="!editing && myImage" class="image-wrapper">
+          <img [src]="myImage" class="img">
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-footer *ngIf="editing" class="footer">
+      <ion-row>
         <ion-col size="3">
           <ion-button fill="clear" expand="full" (click)="rotateLeft()">
             <ion-icon name="refresh" class="flipped" slot="icon-only"></ion-icon>
@@ -70,9 +76,6 @@
         </ion-col>
       </ion-row>
     </ion-footer>
-    <div *ngIf="!editing && myImage" class="image-wrapper">
-      <img [src]="myImage" class="img">
-    </div>
     <ion-button *ngIf="!editing" (click)="captureImage()" expand="block">
       {{ !myImage ? 'Escoger una imagen' : 'Escoger otra imagen'}} 
     </ion-button>

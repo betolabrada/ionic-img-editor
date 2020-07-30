@@ -11,7 +11,8 @@ import { ToastController, Platform } from '@ionic/angular';
 import { PhotoLibrary } from '@ionic-native/photo-library/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
-import { Instagram } from '@ionic-native/instagram/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+
 
 @Component({
   selector: 'app-home',
@@ -37,13 +38,17 @@ export class HomePage {
     private platform: Platform,
     private photoLibrary: PhotoLibrary,
     private androidPermissions: AndroidPermissions,
-    private instagram: Instagram
+    private socialSharing: SocialSharing
   ) {}
 
   // Compartir imagen
   async shareImage() {
+    const options = {
+      message: 'Enviado desde PicEditor App',
+      files: [this.myImage]
+    }
     try {
-      await this.instagram.share(this.myImage);
+      await this.socialSharing.shareWithOptions(options);
     } catch (err) {
       alert(err);
     }
